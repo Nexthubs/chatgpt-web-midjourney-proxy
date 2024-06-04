@@ -1,9 +1,7 @@
 <script setup lang="ts">
 import { NTabs,NTabPane } from 'naive-ui';
 import aiDrawInputItem from './aiDrawInputItem.vue'
-import aiFace from './aiFace.vue'
 import aiBlend from './aiBlend.vue'
-import aiDall from './aiDall.vue'
 import { useBasicLayout } from '@/hooks/useBasicLayout'
 import { SvgIcon } from '@/components/common'
 const $emit=defineEmits(['drawSent','close']);
@@ -21,16 +19,11 @@ const {isMobile}= useBasicLayout()
         <aiDrawInputItem @draw-sent="drawSent" @close="$emit('close')"></aiDrawInputItem>
 
     </n-tab-pane>
-    <n-tab-pane name="face" :tab="$t('mjchat.face')">
-    <div class="p-4"><aiFace  /></div>
-     
-    </n-tab-pane>
+    
     <n-tab-pane name="blend" :tab="$t('mjchat.blend')">
      <div class="p-4"><aiBlend  /></div>
     </n-tab-pane>
-    <n-tab-pane name="dall3" tab="Dall.E">
-     <div class="p-4"><aiDall  /></div>
-    </n-tab-pane>
+    
 
     <n-tab-pane name="Close" v-if="isMobile" >
       <template #tab>
