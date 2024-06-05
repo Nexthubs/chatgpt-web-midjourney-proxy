@@ -49,7 +49,7 @@ export const auth = async ( req :Request , res:Response , next:NextFunction ) =>
     try {
       checkLimit( req, res );
       const Authorization = req.header('Authorization')
-      if (!Authorization || !AUTH_SECRET_KEY.split(',').includes(Authorization.replace('Bearer ', '').trim())
+      if (!Authorization || !AUTH_SECRET_KEY.split(',').includes(Authorization.replace('Bearer ', '').trim()))
         throw new Error('Error: 无访问权限 | No access rights')
       
       clearLimit( req, res);
