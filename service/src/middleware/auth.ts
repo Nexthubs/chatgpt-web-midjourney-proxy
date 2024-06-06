@@ -49,7 +49,7 @@ export const auth = async ( req :Request , res:Response , next:NextFunction ) =>
   if (AUTH_SECRET_KEYS.length > 0) {
     try {
       checkLimit(req, res);
-      const Authorization = req.header('Authorization');
+      const Authorization = req.header('X-Ptoken');
       if (!Authorization || !AUTH_SECRET_KEYS.includes(Authorization.replace('Bearer ', '').trim()))
         throw new Error('Error: 无访问权限 | No access rights');
       
