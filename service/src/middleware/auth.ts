@@ -103,14 +103,13 @@ const clearLimit=  ( req :Request , res:Response )=>{
 
 export const authV2 = async ( req :Request , res:Response , next:NextFunction ) => {
   
-  const AUTH_SECRET_KEY = process.env.AUTH_SECRET_KEY
-  if (isNotEmptyString(AUTH_SECRET_KEY)) {
+  const AUTH_SECRET_KEYS = process.env.AUTH_SECRET_KEY?.split(',') || [];
+  if (AUTH_SECRET_KEYS.length > 0) {
     try {
-
-      checkLimit( req, res );
-      const Authorization = req.header('X-Ptoken')
-      if ( !Authorization || Authorization.trim() !== AUTH_SECRET_KEY.trim())
-        throw new Error('Error: 无访问权限 | No access rights')
+      checkLimit(req, res);
+      const Authorization = req.header('X-Ptoken');
+      if (!Authorization || !AUTH_SECRET_KEYS.includes(Authorization.replace('Bearer ', '').trim()))
+        throw new Error('Error: 无访问权限 | No access rights');
       clearLimit( req, res);
       next()
        //throw new Error('Error: 无访问权限 | No access rights')
