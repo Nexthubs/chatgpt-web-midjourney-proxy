@@ -30,8 +30,9 @@ export const verify=  async ( req :Request , res:Response ) => {
     if (!token)
       throw new Error('Secret key is empty')
 
-    if (!process.env.AUTH_SECRET_KEY.split(',').includes(token))
-      throw new Error('密钥无效 | Secret key is invalid')
+		const AUTH_SECRET_KEYS = process.env.AUTH_SECRET_KEY?.split(',') || [];
+    if (!AUTH_SECRET_KEYS.includes(token)) throw new Error('密钥无效 | Secret key is invalid');
+
       
     clearLimit( req, res);
     res.send({ status: 'Success', message: 'Verify successfully', data: null })
@@ -44,13 +45,13 @@ export const verify=  async ( req :Request , res:Response ) => {
 export const auth = async ( req :Request , res:Response , next:NextFunction ) => {
   
 
-  const AUTH_SECRET_KEY = process.env.AUTH_SECRET_KEY
-  if (isNotEmptyString(AUTH_SECRET_KEY)) {
+  const AUTH_SECRET_KEYS = process.env.AUTH_SECRET_KEY?.split(',') || [];
+  if (AUTH_SECRET_KEYS.length > 0) {
     try {
-      checkLimit( req, res );
-      const Authorization = req.header('Authorization')
-      if (!Authorization || !AUTH_SECRET_KEY.split(',').includes(Authorization.replace('Bearer ', '').trim()))
-        throw new Error('Error: 无访问权限 | No access rights')
+      checkLimit(req, res);
+      const Authorization = req.header('Authorization');
+      if (!Authorization || !AUTH_SECRET_KEYS.includes(Authorization.replace('Bearer ', '').trim()))
+        throw new Error('Error: 无访问权限 | No access rights');
       
       clearLimit( req, res);
       next()
